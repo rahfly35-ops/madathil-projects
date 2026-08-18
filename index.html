@@ -227,6 +227,16 @@ p{max-width:66ch}
 .btn.s:hover{text-decoration:none;border-color:var(--accent)}
 .foot .meta{margin-top:26px;color:var(--ink-mute);font-family:ui-monospace,Consolas,monospace;font-size:12px}
 
+/* MS Project caption */
+.msp-note{display:flex;gap:9px;align-items:flex-start;margin:14px 2px 0;font-size:12.5px;line-height:1.55;color:var(--ink-mute);font-style:italic;max-width:none}
+.msp-note svg{flex:0 0 auto;margin-top:2px;opacity:.8}
+
+/* toast */
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);
+  padding:12px 18px;border-radius:10px;font-size:13.5px;font-weight:600;opacity:0;pointer-events:none;
+  transition:opacity .3s,transform .3s;z-index:60;box-shadow:0 10px 34px rgba(0,0,0,.35);white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
 /* reveal */
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
 .reveal.reveal-in{opacity:1;transform:none}
@@ -388,6 +398,10 @@ p{max-width:66ch}
         <span class="mono">Durations in working days</span>
       </div>
     </div>
+    <p class="msp-note reveal">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+      <span>Recreated depiction for interactive purposes — this schedule view has been rebuilt for the web from the actual Microsoft Project (.mpp) schedule produced for the EVCCF plan. Dates, durations, critical path and slack reflect that plan.</span>
+    </p>
 
     <h3 class="reveal" style="margin:52px 0 6px;font-size:20px">Phase timeline &amp; budget weighting</h3>
     <p class="reveal" style="color:var(--ink-mute);font-size:14px;margin-bottom:8px">Bar length = share of the $1.8M budget. Installation and early planning carry the weight.</p>
@@ -503,9 +517,10 @@ p{max-width:66ch}
     <h2 class="reveal">Let's talk delivery.</h2>
     <p class="reveal" style="margin:0 auto;color:var(--ink-dim)">Open to project coordination, project officer and project management roles across Melbourne. Immediate start.</p>
     <div class="cta-row reveal">
-      <a class="btn p" href="mailto:rahultvmin@gmail.com">✉ rahultvmin@gmail.com</a>
+      <a class="btn p" id="emailBtn" href="mailto:rahultvmin@gmail.com">✉ Email me</a>
       <a class="btn s" href="https://www.linkedin.com/in/rahulmadathil/" target="_blank" rel="noopener">in · LinkedIn</a>
     </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
     <div class="meta reveal">Rahul Madathil · Melbourne, Australia · +61 478 168 076 · Full Australian work rights until March 2029</div>
   </div>
 </footer>
@@ -554,20 +569,39 @@ p{max-width:66ch}
   cp.addEventListener('click',toggleCP);
   cp.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleCP();}});
 
-  /* hero canvas network */
-  var cv=document.getElementById('net'),ctx=cv.getContext('2d'),W,H,nodes=[],raf;
+  /* email button — copy + compose with confirmation */
+  var eb=document.getElementById('emailBtn'),toast=document.getElementById('toast'),tT;
+  function showToast(msg){if(!toast)return;toast.textContent=msg;toast.classList.add('show');clearTimeout(tT);tT=setTimeout(function(){toast.classList.remove('show');},2800);}
+  if(eb){eb.addEventListener('click',function(){var em='rahultvmin@gmail.com';
+    try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(em).then(function(){showToast('Copied '+em+' — opening your email app…');},function(){showToast(em);});}
+      else showToast(em);}catch(e){showToast(em);}});}
+
+  /* hero canvas — charging network with travelling current */
+  var cv=document.getElementById('net'),ctx=cv&&cv.getContext('2d'),W,H,nodes=[],pulses=[],raf;
   function css(v){return getComputedStyle(root).getPropertyValue(v).trim();}
   function size(){W=cv.width=cv.offsetWidth*devicePixelRatio;H=cv.height=cv.offsetHeight*devicePixelRatio;}
-  function init(){nodes=[];var n=Math.min(46,Math.floor(cv.offsetWidth/26));for(var i=0;i<n;i++)nodes.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.14*devicePixelRatio,vy:(Math.random()-.5)*.14*devicePixelRatio,p:Math.random()*6.28});}
-  function frame(){ctx.clearRect(0,0,W,H);var amber=css('--amber')||'#f0a94b',teal=css('--teal')||'#48c8bd';
-    for(var i=0;i<nodes.length;i++){var a=nodes[i];a.x+=a.vx;a.y+=a.vy;a.p+=.02;
+  function rnd(a,b){return a+Math.random()*(b-a);}
+  function newPulse(){return {a:(Math.random()*nodes.length)|0,b:(Math.random()*nodes.length)|0,t:Math.random(),sp:rnd(.004,.012)};}
+  function init(){nodes=[];var n=Math.min(64,Math.floor(cv.offsetWidth/20));
+    for(var i=0;i<n;i++)nodes.push({x:Math.random()*W,y:Math.random()*H,vx:rnd(-.34,.34)*devicePixelRatio,vy:rnd(-.34,.34)*devicePixelRatio,p:Math.random()*6.28});
+    pulses=[];for(var k=0;k<18;k++)pulses.push(newPulse());}
+  function frame(){ctx.clearRect(0,0,W,H);
+    var amber=css('--amber')||'#f0a94b',teal=css('--teal')||'#48c8bd',max=155*devicePixelRatio;
+    for(var i=0;i<nodes.length;i++){var a=nodes[i];a.x+=a.vx;a.y+=a.vy;a.p+=.03;
       if(a.x<0||a.x>W)a.vx*=-1;if(a.y<0||a.y>H)a.vy*=-1;
-      for(var j=i+1;j<nodes.length;j++){var b=nodes[j],dx=a.x-b.x,dy=a.y-b.y,d=Math.hypot(dx,dy),max=140*devicePixelRatio;
-        if(d<max){ctx.strokeStyle=teal;ctx.globalAlpha=(1-d/max)*.16;ctx.lineWidth=devicePixelRatio;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}}}
-    for(var k=0;k<nodes.length;k++){var c=nodes[k],r=(1.4+Math.sin(c.p)*.8)*devicePixelRatio;
-      ctx.globalAlpha=.5+Math.sin(c.p)*.3;ctx.fillStyle=amber;ctx.beginPath();ctx.arc(c.x,c.y,r,0,6.29);ctx.fill();}
-    ctx.globalAlpha=1;raf=requestAnimationFrame(frame);}
-  if(cv){size();init();if(rm){frame();cancelAnimationFrame(raf);}else frame();
+      for(var j=i+1;j<nodes.length;j++){var b=nodes[j],dx=a.x-b.x,dy=a.y-b.y,d=Math.hypot(dx,dy);
+        if(d<max){ctx.strokeStyle=teal;ctx.globalAlpha=(1-d/max)*.30;ctx.lineWidth=devicePixelRatio;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}}}
+    for(var k=0;k<nodes.length;k++){var c=nodes[k],r=(1.7+Math.sin(c.p)*.9)*devicePixelRatio;
+      ctx.globalAlpha=.55+Math.sin(c.p)*.32;ctx.fillStyle=teal;ctx.beginPath();ctx.arc(c.x,c.y,r,0,6.29);ctx.fill();}
+    ctx.shadowColor=amber;
+    for(var p=0;p<pulses.length;p++){var pu=pulses[p],na=nodes[pu.a],nb=nodes[pu.b];
+      if(!na||!nb){pulses[p]=newPulse();continue;}
+      pu.t+=pu.sp;if(pu.t>=1){pulses[p]=newPulse();continue;}
+      var x=na.x+(nb.x-na.x)*pu.t,y=na.y+(nb.y-na.y)*pu.t;
+      ctx.globalAlpha=Math.sin(pu.t*Math.PI);ctx.shadowBlur=9*devicePixelRatio;ctx.fillStyle=amber;
+      ctx.beginPath();ctx.arc(x,y,2.6*devicePixelRatio,0,6.29);ctx.fill();}
+    ctx.shadowBlur=0;ctx.globalAlpha=1;raf=requestAnimationFrame(frame);}
+  if(cv&&ctx){size();init();if(rm){frame();cancelAnimationFrame(raf);}else frame();
     addEventListener('resize',function(){size();init();});}
 })();
 </script>
