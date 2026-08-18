@@ -254,6 +254,14 @@ p{max-width:66ch}
 .matrix .cell.empty .c{color:var(--ink-mute);opacity:.35}
 .matrix-cap{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:11px;color:var(--ink-mute);font-family:ui-monospace,Consolas,monospace}
 .matrix-cap i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-right:5px}
+.matrix .cell{cursor:help}
+.matrix .cell:hover,.matrix .cell:focus-visible{outline:2px solid var(--brand);outline-offset:-1px}
+.matrix .ml .msc{font-family:ui-monospace,Consolas,monospace;font-size:10px;color:var(--ink-mute);border:1px solid var(--border-str);border-radius:4px;padding:0 5px;margin-left:auto}
+.mtip{position:fixed;z-index:70;max-width:290px;background:var(--ink);color:var(--bg);padding:10px 13px;border-radius:9px;font-size:12px;line-height:1.55;box-shadow:0 12px 34px rgba(0,0,0,.32);opacity:0;pointer-events:none;transform:translateY(4px);transition:opacity .15s,transform .15s}
+.mtip.show{opacity:1;transform:none}
+.mtip b{color:#fff;display:block;margin-bottom:5px;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase}
+:root[data-theme="dark"] .mtip b,:root:not([data-theme="light"]) .mtip b{color:var(--bg)}
+.mtip .rk{display:block;padding:1px 0}
 
 /* RISK REGISTER TABLE */
 .regwrap{margin-top:16px;border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
@@ -367,7 +375,7 @@ p{max-width:66ch}
   <div class="wrap hero-inner">
     <span class="kick reveal">Project Management Portfolio · <b>Open to work</b></span>
     <h1 class="reveal">Rahul&nbsp;Madathil<br><span class="thin">plans that get built.</span></h1>
-    <p class="role reveal">Early in a project-management career, targeting <b>project coordinator and project officer</b> roles. I turn ambiguous briefs into scheduled, costed, de-risked plans: work breakdown and critical path, budgets, resourcing and stakeholder governance.</p>
+    <p class="role reveal">Early in a project-management career, targeting <b>project coordinator and project officer</b> roles. I turn ambiguous briefs into scheduled, costed, de-risked plans, then present them so decision-makers actually follow them: <b>interactive timelines, risk heat-maps and visual roadmaps</b> in place of dense reports.</p>
     <div class="chips reveal">
       <span class="chip">📍 Melbourne, Australia</span>
       <span class="chip"><b>Full Australian work rights until March 2029</b></span>
@@ -566,35 +574,40 @@ p{max-width:66ch}
       <div class="risk-row"><div class="rn">Contractor unavailability<small>Phase 2 · installation delays</small></div><span class="pill med">Medium</span><span class="pill strat">Transfer · penalty clauses</span></div>
     </div>
 
-    <p class="rsub reveal" style="margin-top:40px">Risk matrix · count by severity and phase</p>
+    <p class="rsub reveal" style="margin-top:40px">Risk matrix · count by severity and phase <span style="text-transform:none;letter-spacing:0;color:var(--ink-mute);font-weight:400">(hover any cell for the risks behind it)</span></p>
     <div class="matrix-wrap reveal">
       <div class="matrix">
         <div class="mh corner">Severity ↓ / Phase →</div>
         <div class="mh">P1<br>Planning</div><div class="mh">P2<br>Procure</div><div class="mh">P3<br>Install</div><div class="mh">P4<br>Train/Test</div><div class="mh">P5<br>Handover</div>
-        <div class="ml"><span class="d" style="background:var(--red)"></span>High</div>
-        <div class="cell" style="background:color-mix(in srgb,var(--red) 34%,var(--surface))"><span class="c">2</span><span class="cl">high</span></div>
-        <div class="cell" style="background:color-mix(in srgb,var(--red) 20%,var(--surface))"><span class="c">1</span><span class="cl">high</span></div>
-        <div class="cell" style="background:color-mix(in srgb,var(--red) 66%,var(--surface))"><span class="c">4</span><span class="cl">high</span></div>
-        <div class="cell" style="background:color-mix(in srgb,var(--red) 20%,var(--surface))"><span class="c">1</span><span class="cl">high</span></div>
-        <div class="cell" style="background:color-mix(in srgb,var(--red) 34%,var(--surface))"><span class="c">2</span><span class="cl">high</span></div>
-        <div class="ml"><span class="d" style="background:var(--amber)"></span>Medium</div>
-        <div class="cell" style="background:color-mix(in srgb,var(--amber) 34%,var(--surface))"><span class="c">2</span><span class="cl">med</span></div>
-        <div class="cell" style="background:color-mix(in srgb,var(--amber) 34%,var(--surface))"><span class="c">2</span><span class="cl">med</span></div>
-        <div class="cell" style="background:color-mix(in srgb,var(--amber) 20%,var(--surface))"><span class="c">1</span><span class="cl">med</span></div>
-        <div class="cell" style="background:color-mix(in srgb,var(--amber) 20%,var(--surface))"><span class="c">1</span><span class="cl">med</span></div>
-        <div class="cell" style="background:color-mix(in srgb,var(--amber) 20%,var(--surface))"><span class="c">1</span><span class="cl">med</span></div>
-        <div class="ml"><span class="d" style="background:var(--green)"></span>Low</div>
-        <div class="cell empty"><span class="c">0</span></div>
-        <div class="cell empty"><span class="c">0</span></div>
-        <div class="cell empty"><span class="c">0</span></div>
-        <div class="cell" style="background:color-mix(in srgb,var(--green) 22%,var(--surface))"><span class="c">1</span><span class="cl">low</span></div>
-        <div class="cell empty"><span class="c">0</span></div>
+
+        <div class="ml"><span class="d" style="background:var(--red)"></span>High <span class="msc">5/5</span></div>
+        <div class="cell" data-sev="High (score 5/5)" data-ph="Phase 1 · Planning" data-risks="Poor definition of project scope; Delays in regulatory approvals" style="background:color-mix(in srgb,var(--red) 34%,var(--surface))"><span class="c">2</span><span class="cl">high</span></div>
+        <div class="cell" data-sev="High (score 5/5)" data-ph="Phase 2 · Procurement" data-risks="Inaccurate cost estimates" style="background:color-mix(in srgb,var(--red) 20%,var(--surface))"><span class="c">1</span><span class="cl">high</span></div>
+        <div class="cell" data-sev="High (score 5/5)" data-ph="Phase 3 · Installation" data-risks="Inadequate contractor expertise; Material availability; Technical integration issues; Regulatory compliance &amp; safety issues" style="background:color-mix(in srgb,var(--red) 66%,var(--surface))"><span class="c">4</span><span class="cl">high</span></div>
+        <div class="cell" data-sev="High (score 5/5)" data-ph="Phase 4 · Training &amp; Testing" data-risks="System testing failures" style="background:color-mix(in srgb,var(--red) 20%,var(--surface))"><span class="c">1</span><span class="cl">high</span></div>
+        <div class="cell" data-sev="High (score 5/5)" data-ph="Phase 5 · Handover" data-risks="Poor quality assurance; Unacceptable handover to stakeholders" style="background:color-mix(in srgb,var(--red) 34%,var(--surface))"><span class="c">2</span><span class="cl">high</span></div>
+
+        <div class="ml"><span class="d" style="background:var(--amber)"></span>Medium <span class="msc">3/5</span></div>
+        <div class="cell" data-sev="Medium (score 3/5)" data-ph="Phase 1 · Planning" data-risks="Unavailable subject-matter experts; Inaccurate feasibility studies" style="background:color-mix(in srgb,var(--amber) 34%,var(--surface))"><span class="c">2</span><span class="cl">med</span></div>
+        <div class="cell" data-sev="Medium (score 3/5)" data-ph="Phase 2 · Procurement" data-risks="Vendor selection delays; Contractor unavailability" style="background:color-mix(in srgb,var(--amber) 34%,var(--surface))"><span class="c">2</span><span class="cl">med</span></div>
+        <div class="cell" data-sev="Medium (score 3/5)" data-ph="Phase 3 · Installation" data-risks="Site preparation delays" style="background:color-mix(in srgb,var(--amber) 20%,var(--surface))"><span class="c">1</span><span class="cl">med</span></div>
+        <div class="cell" data-sev="Medium (score 3/5)" data-ph="Phase 4 · Training &amp; Testing" data-risks="Staff availability for training" style="background:color-mix(in srgb,var(--amber) 20%,var(--surface))"><span class="c">1</span><span class="cl">med</span></div>
+        <div class="cell" data-sev="Medium (score 3/5)" data-ph="Phase 5 · Handover" data-risks="Cash flow problems" style="background:color-mix(in srgb,var(--amber) 20%,var(--surface))"><span class="c">1</span><span class="cl">med</span></div>
+
+        <div class="ml"><span class="d" style="background:var(--green)"></span>Low <span class="msc">1/5</span></div>
+        <div class="cell empty" data-sev="Low (score 1/5)" data-ph="Phase 1 · Planning" data-risks=""><span class="c">0</span></div>
+        <div class="cell empty" data-sev="Low (score 1/5)" data-ph="Phase 2 · Procurement" data-risks=""><span class="c">0</span></div>
+        <div class="cell empty" data-sev="Low (score 1/5)" data-ph="Phase 3 · Installation" data-risks=""><span class="c">0</span></div>
+        <div class="cell" data-sev="Low (score 1/5)" data-ph="Phase 4 · Training &amp; Testing" data-risks="Training material development delays" style="background:color-mix(in srgb,var(--green) 22%,var(--surface))"><span class="c">1</span><span class="cl">low</span></div>
+        <div class="cell empty" data-sev="Low (score 1/5)" data-ph="Phase 5 · Handover" data-risks=""><span class="c">0</span></div>
       </div>
       <div class="matrix-cap">
         <span><i style="background:color-mix(in srgb,var(--red) 50%,var(--surface))"></i>Higher count = darker cell</span>
         <span>10 High · 7 Medium · 1 Low · 18 total</span>
       </div>
     </div>
+    <p class="reveal" style="color:var(--ink-mute);font-size:12.5px;margin-top:12px;font-style:italic">Severity here is recreated as a <b style="font-style:normal;color:var(--ink-dim)">1 to 5 numeric score</b> (High = 5, Medium = 3, Low = 1) to show one way to quantify and depict risk on a project. The original EVCCF register used a <b style="font-style:normal;color:var(--ink-dim)">qualitative</b> High / Medium / Low rating.</p>
+    <div class="mtip" id="mtip" role="status" aria-live="polite"></div>
 
     <p class="rsub reveal" style="margin-top:40px">Full risk register · all 18 risks</p>
     <div class="regwrap reveal">
@@ -855,5 +868,31 @@ p{max-width:66ch}
   if(eb){eb.addEventListener('click',function(){var em='rahultvmin@gmail.com';
     try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(em).then(function(){showToast('Copied '+em+', opening your email app');},function(){showToast(em);});}
       else showToast(em);}catch(e){showToast(em);}});}
+
+  /* risk matrix cell tooltips */
+  var mtip=document.getElementById('mtip');
+  if(mtip){
+    var mcells=document.querySelectorAll('.matrix .cell');
+    function showTip(c){
+      var risks=c.getAttribute('data-risks')||'';
+      var html='<b>'+c.getAttribute('data-ph')+' · '+c.getAttribute('data-sev')+'</b>';
+      if(risks){risks.split(';').forEach(function(r){html+='<span class="rk">• '+r.trim()+'</span>';});}
+      else{html+='<span class="rk">No risks at this severity in this phase.</span>';}
+      mtip.innerHTML=html;mtip.classList.add('show');
+      var r=c.getBoundingClientRect(),tw=mtip.offsetWidth,th=mtip.offsetHeight;
+      var left=r.left+r.width/2-tw/2;left=Math.max(8,Math.min(left,innerWidth-tw-8));
+      var top=r.top-th-10;if(top<8)top=r.bottom+10;
+      mtip.style.left=left+'px';mtip.style.top=top+'px';
+    }
+    function hideTip(){mtip.classList.remove('show');}
+    Array.prototype.forEach.call(mcells,function(c){
+      c.setAttribute('tabindex','0');
+      c.addEventListener('mouseenter',function(){showTip(c);});
+      c.addEventListener('mouseleave',hideTip);
+      c.addEventListener('focus',function(){showTip(c);});
+      c.addEventListener('blur',hideTip);
+    });
+    addEventListener('scroll',hideTip,{passive:true});
+  }
 })();
 </script>
