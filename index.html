@@ -75,17 +75,11 @@ p{max-width:66ch}
 
 /* HERO */
 .hero{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden;background:var(--bg)}
-.hero-glow,.hero-grid{position:absolute;inset:0;pointer-events:none}
-.hero-glow{inset:-25%;background:
-  radial-gradient(38% 44% at 22% 28%,color-mix(in srgb,var(--brand) 26%,transparent),transparent 70%),
-  radial-gradient(34% 40% at 82% 68%,color-mix(in srgb,var(--green) 22%,transparent),transparent 70%),
-  radial-gradient(30% 34% at 62% 12%,color-mix(in srgb,var(--amber) 14%,transparent),transparent 72%);
-  filter:blur(6px);animation:glowdrift 24s ease-in-out infinite alternate}
-.hero-grid{background:repeating-linear-gradient(90deg,transparent 0,transparent 63px,var(--grid-line) 63px,var(--grid-line) 64px);
-  animation:gridpan 42s linear infinite}
+.hero-grid,.hero-bars{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.hero-grid{background:repeating-linear-gradient(90deg,transparent 0,transparent 63px,var(--grid-line) 63px,var(--grid-line) 64px)}
+.hbar{position:absolute;height:13px;border-radius:7px;opacity:.3;animation:hbardrift linear infinite alternate}
+@keyframes hbardrift{from{transform:translateX(-8px)}to{transform:translateX(15px)}}
 .hero-veil{position:absolute;inset:0;pointer-events:none;background:linear-gradient(to bottom,color-mix(in srgb,var(--bg) 30%,transparent),transparent 26%,transparent 84%,var(--bg))}
-@keyframes glowdrift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(3%,-3%,0) scale(1.09)}}
-@keyframes gridpan{from{background-position:0 0}to{background-position:256px 0}}
 .hero-inner{position:relative;z-index:2;padding:110px 0 40px;width:100%}
 .hero .kick{display:inline-flex;align-items:center;gap:9px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;
   color:var(--ink-dim);font-weight:600;border:1px solid var(--border-str);background:var(--surface);border-radius:999px;padding:6px 14px}
@@ -349,7 +343,7 @@ p{max-width:66ch}
   .reveal{opacity:1;transform:none;transition:none}
   .bar,.track .fill,.rm-seg .rbar,.rm-seg .rtx,.rm-mile{transition:none}
   .roadmap .rm-seg .rbar{transform:scaleX(1)}.roadmap .rm-seg .rtx,.roadmap .rm-mile{opacity:1}
-  .hero-glow,.hero-grid{animation:none}
+  .hbar{animation:none}
   .rm-detail.flip{animation:none}
 }
 </style>
@@ -369,8 +363,19 @@ p{max-width:66ch}
 
 <!-- HERO -->
 <header class="hero">
-  <div class="hero-glow" aria-hidden="true"></div>
   <div class="hero-grid" aria-hidden="true"></div>
+  <div class="hero-bars" aria-hidden="true">
+    <div class="hbar" style="top:12vh;left:4%;width:26%;background:var(--brand);animation-duration:6.5s;animation-delay:-1s"></div>
+    <div class="hbar" style="top:18vh;left:23%;width:18%;background:var(--brand-2);animation-duration:7.6s;animation-delay:-3s"></div>
+    <div class="hbar" style="top:25vh;left:60%;width:22%;background:var(--green);animation-duration:6.9s;animation-delay:-2s"></div>
+    <div class="hbar" style="top:31vh;left:72%;width:13%;background:var(--brand-2);animation-duration:8.2s;animation-delay:-4s"></div>
+    <div class="hbar" style="top:22vh;left:84%;width:11%;background:var(--amber);animation-duration:7.1s;animation-delay:-1.5s"></div>
+    <div class="hbar" style="top:60vh;left:2%;width:20%;background:var(--brand-2);animation-duration:7.8s;animation-delay:-2.5s"></div>
+    <div class="hbar" style="top:66vh;left:17%;width:24%;background:var(--brand);animation-duration:6.7s;animation-delay:-1s"></div>
+    <div class="hbar" style="top:73vh;left:45%;width:16%;background:var(--green);animation-duration:8.5s;animation-delay:-3.5s"></div>
+    <div class="hbar" style="top:79vh;left:59%;width:22%;background:var(--brand-2);animation-duration:7.3s;animation-delay:-2s"></div>
+    <div class="hbar" style="top:85vh;left:31%;width:17%;background:var(--amber);animation-duration:9s;animation-delay:-4.5s"></div>
+  </div>
   <div class="hero-veil" aria-hidden="true"></div>
   <div class="wrap hero-inner">
     <span class="kick reveal">Project Management Portfolio · <b>Open to work</b></span>
