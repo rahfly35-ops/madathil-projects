@@ -110,13 +110,24 @@ p{max-width:66ch}
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:0;transition:opacity .4s;transition-delay:calc(.55s + var(--i)*.16s)}
 .roadmap.go .rm-seg .rtx{opacity:1}
 .rm-seg .rtx small{font-family:ui-monospace,Consolas,monospace;font-weight:400;opacity:.85;margin-left:7px;font-size:10.5px}
-.rm-play{position:absolute;top:-7px;bottom:-7px;width:2px;background:var(--amber);left:0;opacity:0;box-shadow:0 0 8px color-mix(in srgb,var(--amber) 70%,transparent)}
-.rm-play::before{content:"";position:absolute;top:-4px;left:-3px;width:8px;height:8px;border-radius:50%;background:var(--amber)}
-.roadmap.go .rm-play{animation:sweep 7s ease-in-out 1.8s infinite}
+.rm-seg{cursor:pointer}
+.rm-seg.active .rbar,.rm-seg:hover .rbar,.rm-seg:focus-visible .rbar{filter:brightness(1.16)}
+.rm-seg.active::after{content:"";position:absolute;left:50%;bottom:-8px;transform:translateX(-50%);width:0;height:0;border:6px solid transparent;border-top-color:var(--amber)}
+.rm-seg:focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:6px}
 .rm-mile{display:flex;align-items:center;gap:7px;flex:0 0 auto;padding-left:6px;color:var(--amber);font-size:12px;font-weight:600;opacity:0;transition:opacity .5s;transition-delay:1.35s}
 .roadmap.go .rm-mile{opacity:1}
 .rm-mile .dia{width:12px;height:12px;background:var(--amber);transform:rotate(45deg)}
-@keyframes sweep{0%{left:0;opacity:0}8%{opacity:.95}70%{opacity:.95}86%{left:88%;opacity:.6}100%{left:88%;opacity:0}}
+.rm-hint{font-size:11.5px;color:var(--ink-mute);margin-top:11px;font-style:italic}
+.rm-detail{margin-top:14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:15px 18px;box-shadow:var(--shadow)}
+.rd-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 16px;margin-bottom:7px}
+.rd-name{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--ink)}
+.rd-meta{font-family:ui-monospace,Consolas,monospace;font-size:12px;color:var(--ink-mute)}
+.rd-meta b{color:var(--brand)}
+.rd-desc{font-size:14px;color:var(--ink-dim);margin:0 0 11px;max-width:72ch}
+.rd-tasks{display:flex;flex-wrap:wrap;gap:7px}
+.rd-tasks span{font-family:ui-monospace,Consolas,monospace;font-size:11.5px;color:var(--ink-dim);background:var(--surface-2);border:1px solid var(--border);border-radius:6px;padding:4px 9px}
+.rm-detail.flip{animation:rdfade .35s ease}
+@keyframes rdfade{from{opacity:.35;transform:translateY(4px)}to{opacity:1;transform:none}}
 @media(max-width:720px){.rm-seg .rtx{font-size:10px}}
 
 /* STATS */
@@ -299,8 +310,8 @@ p{max-width:66ch}
   .reveal{opacity:1;transform:none;transition:none}
   .bar,.track .fill,.rm-seg .rbar,.rm-seg .rtx,.rm-mile{transition:none}
   .roadmap .rm-seg .rbar{transform:scaleX(1)}.roadmap .rm-seg .rtx,.roadmap .rm-mile{opacity:1}
-  .hero-glow,.hero-grid,.roadmap.go .rm-play{animation:none}
-  .rm-play{display:none}
+  .hero-glow,.hero-grid{animation:none}
+  .rm-detail.flip{animation:none}
 }
 </style>
 
@@ -340,7 +351,12 @@ p{max-width:66ch}
         <div class="rm-seg" style="--w:9.7%;--i:3;--sc:#2e527a"><span class="rbar"></span><span class="rtx">Train<small>30d</small></span></div>
         <div class="rm-seg" style="--w:11.9%;--i:4;--sc:#223f63"><span class="rbar"></span><span class="rtx">Handover<small>37d</small></span></div>
         <div class="rm-mile"><span class="dia"></span> Go-live</div>
-        <div class="rm-play" aria-hidden="true"></div>
+      </div>
+      <p class="rm-hint">Hover, tap or arrow-key through the phases to explore each one.</p>
+      <div class="rm-detail" id="rmDetail" aria-live="polite">
+        <div class="rd-top"><span class="rd-name"></span><span class="rd-meta"></span></div>
+        <p class="rd-desc"></p>
+        <div class="rd-tasks"></div>
       </div>
     </div>
   </div>
@@ -674,6 +690,39 @@ p{max-width:66ch}
 
   var road=document.getElementById('roadmap');
   if(road){requestAnimationFrame(function(){requestAnimationFrame(function(){road.classList.add('go');});});}
+
+  /* viewer-driven phase explorer */
+  var PH=[
+    {n:'Planning & Site Selection',d:'133 days',dt:'09 Sep 24 to 10 Mar 25',b:'$634,935 (35.3%)',desc:'Feasibility studies, site selection across 57 council sites, and securing regulatory approvals. The longest phase, and the second-largest slice of budget.',t:['Project Initiation','Site Assessments','Regulatory Approvals']},
+    {n:'Procurement & Contractor Engagement',d:'30 days',dt:'11 Mar to 18 Apr 25',b:'$129,900 (7.2%)',desc:'Selecting vendors and contractors and procuring equipment, synchronised with the schedule to keep the plan moving.',t:['Procurement','Contractor Engagement']},
+    {n:'Installation & Integration',d:'80 days',dt:'21 Apr to 06 Aug 25',b:'$700,800 (38.9%)',desc:'Installing the 120 charging stations and integrating smart-charging software across sites. The largest phase by budget, run with contractors and engineers in parallel.',t:['Installation','Integration']},
+    {n:'Training & Testing',d:'30 days',dt:'07 Aug to 17 Sep 25',b:'$143,920 (8.0%)',desc:'Training council staff to operate and maintain the network while system testing runs concurrently.',t:['Staff Training','System Testing']},
+    {n:'Completion & Handover',d:'37 days',dt:'18 Sep to 07 Nov 25',b:'$190,600 (10.6%)',desc:'Final quality assurance, inspections and sign-off, then handover of the completed infrastructure to the councils.',t:['Final Quality Assurance','Handover']}
+  ];
+  if(road){
+    var segs=road.querySelectorAll('.rm-seg'),det=document.getElementById('rmDetail');
+    function setPhase(i){
+      for(var k=0;k<segs.length;k++)segs[k].classList.toggle('active',k===i);
+      var p=PH[i];
+      det.querySelector('.rd-name').textContent=p.n;
+      det.querySelector('.rd-meta').innerHTML='<b>'+p.d+'</b> · '+p.dt+' · '+p.b;
+      det.querySelector('.rd-desc').textContent=p.desc;
+      det.querySelector('.rd-tasks').innerHTML=p.t.map(function(x){return '<span>'+x+'</span>';}).join('');
+      det.classList.remove('flip');void det.offsetWidth;det.classList.add('flip');
+    }
+    Array.prototype.forEach.call(segs,function(s,k){
+      s.setAttribute('tabindex','0');s.setAttribute('role','button');s.setAttribute('aria-label',PH[k].n);
+      s.addEventListener('mouseenter',function(){setPhase(k);});
+      s.addEventListener('focus',function(){setPhase(k);});
+      s.addEventListener('click',function(){setPhase(k);});
+      s.addEventListener('keydown',function(e){
+        if(e.key==='Enter'||e.key===' '){e.preventDefault();setPhase(k);}
+        else if(e.key==='ArrowRight'&&segs[k+1]){e.preventDefault();segs[k+1].focus();}
+        else if(e.key==='ArrowLeft'&&segs[k-1]){e.preventDefault();segs[k-1].focus();}
+      });
+    });
+    setPhase(0);
+  }
 
   function countUp(el){
     var to=parseFloat(el.dataset.to),dec=parseInt(el.dataset.dec||'0'),pre=el.dataset.pre||'',t0=null;
