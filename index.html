@@ -1,10 +1,9 @@
 <title>Madathil Projects</title>
-<meta name="description" content="Project management portfolio of Rahul Madathil — planning, scheduling and delivery, told through an EV charging infrastructure program." />
+<meta name="description" content="Project management portfolio of Rahul Madathil, planning, scheduling and delivery, told through an EV charging infrastructure program." />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%8B%3C/text%3E%3C/svg%3E" />
 <style>
 /* ============ TOKENS ============ */
 :root{
-  /* light — "planning paper" */
   --bg:#f1f2ee; --bg-2:#e8eae4; --surface:#ffffff; --surface-2:#f6f7f3;
   --border:#dcded6; --border-str:#c7cabf;
   --ink:#1b2a38; --ink-dim:#4d5b67; --ink-mute:#7c8893;
@@ -75,10 +74,18 @@ p{max-width:66ch}
 @media(max-width:780px){.nav-links a{display:none}}
 
 /* HERO */
-.hero{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden;
-  background:repeating-linear-gradient(90deg,transparent 0,transparent 63px,var(--grid-line) 63px,var(--grid-line) 64px),var(--bg)}
-.hero::after{content:"";position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(to bottom,color-mix(in srgb,var(--bg) 40%,transparent),transparent 30%,transparent 82%,var(--bg))}
+.hero{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden;background:var(--bg)}
+.hero-glow,.hero-grid{position:absolute;inset:0;pointer-events:none}
+.hero-glow{inset:-25%;background:
+  radial-gradient(38% 44% at 22% 28%,color-mix(in srgb,var(--brand) 26%,transparent),transparent 70%),
+  radial-gradient(34% 40% at 82% 68%,color-mix(in srgb,var(--green) 22%,transparent),transparent 70%),
+  radial-gradient(30% 34% at 62% 12%,color-mix(in srgb,var(--amber) 14%,transparent),transparent 72%);
+  filter:blur(6px);animation:glowdrift 24s ease-in-out infinite alternate}
+.hero-grid{background:repeating-linear-gradient(90deg,transparent 0,transparent 63px,var(--grid-line) 63px,var(--grid-line) 64px);
+  animation:gridpan 42s linear infinite}
+.hero-veil{position:absolute;inset:0;pointer-events:none;background:linear-gradient(to bottom,color-mix(in srgb,var(--bg) 30%,transparent),transparent 26%,transparent 84%,var(--bg))}
+@keyframes glowdrift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(3%,-3%,0) scale(1.09)}}
+@keyframes gridpan{from{background-position:0 0}to{background-position:256px 0}}
 .hero-inner{position:relative;z-index:2;padding:110px 0 40px;width:100%}
 .hero .kick{display:inline-flex;align-items:center;gap:9px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;
   color:var(--ink-dim);font-weight:600;border:1px solid var(--border-str);background:var(--surface);border-radius:999px;padding:6px 14px}
@@ -91,7 +98,7 @@ p{max-width:66ch}
 .chip{font-size:13px;padding:7px 13px;border:1px solid var(--border-str);border-radius:8px;color:var(--ink-dim);background:var(--surface)}
 .chip b{color:var(--ink);font-weight:600}
 
-/* HERO ROADMAP (animated project timeline) */
+/* HERO ROADMAP */
 .roadmap{margin-top:46px;max-width:920px}
 .rm-cap{display:flex;justify-content:space-between;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:9px;font-weight:600}
 .rm-track{position:relative;display:flex;gap:4px;height:34px}
@@ -103,12 +110,14 @@ p{max-width:66ch}
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:0;transition:opacity .4s;transition-delay:calc(.55s + var(--i)*.16s)}
 .roadmap.go .rm-seg .rtx{opacity:1}
 .rm-seg .rtx small{font-family:ui-monospace,Consolas,monospace;font-weight:400;opacity:.85;margin-left:7px;font-size:10.5px}
+.rm-play{position:absolute;top:-7px;bottom:-7px;width:2px;background:var(--amber);left:0;opacity:0;box-shadow:0 0 8px color-mix(in srgb,var(--amber) 70%,transparent)}
+.rm-play::before{content:"";position:absolute;top:-4px;left:-3px;width:8px;height:8px;border-radius:50%;background:var(--amber)}
+.roadmap.go .rm-play{animation:sweep 7s ease-in-out 1.8s infinite}
 .rm-mile{display:flex;align-items:center;gap:7px;flex:0 0 auto;padding-left:6px;color:var(--amber);font-size:12px;font-weight:600;opacity:0;transition:opacity .5s;transition-delay:1.35s}
 .roadmap.go .rm-mile{opacity:1}
 .rm-mile .dia{width:12px;height:12px;background:var(--amber);transform:rotate(45deg)}
-.rm-labels{display:flex;gap:4px;margin-top:9px}
-.rm-labels .rl{flex:0 0 var(--w);font-size:11px;color:var(--ink-mute);font-family:ui-monospace,Consolas,monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-@media(max-width:720px){.rm-seg .rtx{font-size:10px}.rm-labels{display:none}}
+@keyframes sweep{0%{left:0;opacity:0}8%{opacity:.95}70%{opacity:.95}86%{left:88%;opacity:.6}100%{left:88%;opacity:0}}
+@media(max-width:720px){.rm-seg .rtx{font-size:10px}}
 
 /* STATS */
 .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden}
@@ -135,18 +144,20 @@ p{max-width:66ch}
 .card.hz:hover .more,.card.hz:focus-within .more{max-height:280px;opacity:1;margin-top:13px;padding-top:13px;border-top-color:var(--border)}
 .card.hz:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 
-/* WHAT I DID — milestone rail */
-.rail{list-style:none;padding:0;margin:0;position:relative}
-.rail::before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:var(--border-str)}
-.rail li{position:relative;padding:0 0 30px 40px}
-.rail li:last-child{padding-bottom:0}
-.rail .dot{position:absolute;left:2px;top:3px;width:18px;height:18px;border-radius:50%;background:var(--surface);border:2px solid var(--brand);z-index:1}
-.rail .dot::after{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--brand)}
-.rail .ph{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-mute);font-weight:600;font-family:ui-monospace,Consolas,monospace}
-.rail h3{font-size:19px;margin:3px 0 6px}
-.rail p{margin:0;color:var(--ink-dim);font-size:15px}
+/* WHAT I DID, horizontal timeline */
+.hsteps{position:relative;display:flex;gap:0;overflow-x:auto;padding:6px 0 4px;scroll-snap-type:x proximity}
+.hstep{flex:1 0 0;min-width:184px;position:relative;padding:34px 20px 4px 0;scroll-snap-align:start}
+.hstep::before{content:"";position:absolute;top:9px;left:0;right:0;height:2px;background:var(--border-str)}
+.hstep:last-child::before{right:20px}
+.hstep .hnode{position:absolute;top:1px;left:0;width:18px;height:18px;border-radius:50%;background:var(--surface);border:2px solid var(--brand);z-index:1}
+.hstep .hnode::after{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--brand)}
+.hstep .hph{font-family:ui-monospace,Consolas,monospace;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-mute);font-weight:600}
+.hstep h3{font-size:17px;margin:4px 0 7px}
+.hstep p{font-size:13.5px;color:var(--ink-dim);margin:0;max-width:none}
+.hstep .lnk{font-size:12.5px;font-weight:600;display:inline-block;margin-top:8px}
+@media(max-width:760px){.hstep{min-width:76vw}}
 
-/* MS PROJECT WINDOW (Windows) */
+/* MS PROJECT WINDOW */
 .mspwrap{margin-top:34px;border-radius:9px;overflow:hidden;border:1px solid var(--border-str);box-shadow:var(--shadow);background:var(--surface)}
 .msp-title{display:flex;align-items:center;background:var(--msp-head);border-bottom:1px solid var(--msp-line);padding:0 0 0 11px;font-size:12.5px;color:var(--ink-dim);height:34px}
 .msp-appicon{width:18px;height:18px;border-radius:3px;background:var(--msp-green);color:#fff;font-weight:800;display:grid;place-items:center;font-size:12px;margin-right:9px;font-family:Georgia,serif}
@@ -206,15 +217,44 @@ p{max-width:66ch}
 .phase .amt small{color:var(--ink-mute)}
 @media(max-width:720px){.phase{grid-template-columns:1fr;gap:8px}.phase .amt{text-align:left}}
 
-/* RISK — RAG */
+/* RISK */
+.rsub{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute);font-weight:600;margin:0 0 12px}
 .risk-row{display:grid;grid-template-columns:1fr auto auto;gap:14px;align-items:center;padding:13px 0;border-top:1px solid var(--border)}
 .risk-row:first-child{border-top:0}
 .risk-row .rn{font-weight:600;font-size:15px}
 .risk-row .rn small{display:block;color:var(--ink-mute);font-size:12.5px;font-weight:400}
-.pill{font-size:11px;letter-spacing:.04em;text-transform:uppercase;padding:4px 11px;border-radius:999px;font-weight:700}
+.pill{font-size:11px;letter-spacing:.04em;text-transform:uppercase;padding:4px 11px;border-radius:999px;font-weight:700;white-space:nowrap}
 .pill.hi{background:color-mix(in srgb,var(--red) 15%,transparent);color:var(--red)}
 .pill.med{background:color-mix(in srgb,var(--amber) 20%,transparent);color:var(--amber)}
+.pill.lo{background:color-mix(in srgb,var(--green) 18%,transparent);color:var(--green)}
 .pill.strat{background:var(--surface-2);color:var(--ink-dim);font-weight:600;text-transform:none;letter-spacing:0}
+
+/* RISK MATRIX (heat map) */
+.matrix-wrap{margin-top:16px;border:1px solid var(--border);border-radius:12px;background:var(--surface);padding:18px 18px 14px;box-shadow:var(--shadow);overflow-x:auto}
+.matrix{display:grid;grid-template-columns:78px repeat(5,minmax(96px,1fr));gap:6px;min-width:560px}
+.matrix .mh{font-family:ui-monospace,Consolas,monospace;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-mute);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:4px 2px}
+.matrix .mh.corner{align-items:flex-start;justify-content:flex-end}
+.matrix .ml{font-size:12px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:7px}
+.matrix .ml .d{width:10px;height:10px;border-radius:2px}
+.matrix .cell{border-radius:8px;min-height:60px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:var(--surface-2);border:1px solid var(--border)}
+.matrix .cell .c{font-family:var(--serif);font-size:23px;font-weight:700;line-height:1;color:var(--ink)}
+.matrix .cell .cl{font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-mute);margin-top:3px}
+.matrix .cell.empty .c{color:var(--ink-mute);opacity:.35}
+.matrix-cap{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:11px;color:var(--ink-mute);font-family:ui-monospace,Consolas,monospace}
+.matrix-cap i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-right:5px}
+
+/* RISK REGISTER TABLE */
+.regwrap{margin-top:16px;border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+.regscroll{overflow-x:auto}
+.reg{width:100%;border-collapse:collapse;font-size:13.5px;min-width:640px}
+.reg th{background:var(--surface-2);text-align:left;padding:11px 14px;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-mute);font-weight:700;border-bottom:1px solid var(--border)}
+.reg td{padding:11px 14px;border-bottom:1px solid var(--border);color:var(--ink-dim);vertical-align:top}
+.reg tr:last-child td{border-bottom:0}
+.reg td.rk{color:var(--ink);font-weight:600;width:34%}
+.reg td.ph{font-family:ui-monospace,Consolas,monospace;font-size:12px;color:var(--ink-mute);white-space:nowrap}
+.reg tbody tr:hover{background:var(--surface-2)}
+.reg .pill{display:inline-block}
 
 /* CURRENT ROLE */
 .now-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:12px;margin:14px 0 6px}
@@ -259,6 +299,8 @@ p{max-width:66ch}
   .reveal{opacity:1;transform:none;transition:none}
   .bar,.track .fill,.rm-seg .rbar,.rm-seg .rtx,.rm-mile{transition:none}
   .roadmap .rm-seg .rbar{transform:scaleX(1)}.roadmap .rm-seg .rtx,.roadmap .rm-mile{opacity:1}
+  .hero-glow,.hero-grid,.roadmap.go .rm-play{animation:none}
+  .rm-play{display:none}
 }
 </style>
 
@@ -276,18 +318,21 @@ p{max-width:66ch}
 
 <!-- HERO -->
 <header class="hero">
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="hero-grid" aria-hidden="true"></div>
+  <div class="hero-veil" aria-hidden="true"></div>
   <div class="wrap hero-inner">
     <span class="kick reveal">Project Management Portfolio · <b>Open to work</b></span>
     <h1 class="reveal">Rahul&nbsp;Madathil<br><span class="thin">plans that get built.</span></h1>
-    <p class="role reveal">A project manager who turns ambiguous briefs into <b>scheduled, costed, de-risked plans</b> — from work breakdown and critical path to budgets, resourcing and stakeholder governance.</p>
+    <p class="role reveal">A project manager who turns ambiguous briefs into <b>scheduled, costed, de-risked plans</b>: work breakdown and critical path, budgets, resourcing and stakeholder governance.</p>
     <div class="chips reveal">
       <span class="chip">📍 Melbourne, Australia</span>
       <span class="chip"><b>Full Australian work rights until March 2029</b></span>
-      <span class="chip">🎓 MIS — Project Management specialisation (Deakin, 2026)</span>
+      <span class="chip">🎓 MIS, Project Management specialisation (Deakin, 2026)</span>
     </div>
 
     <div class="roadmap reveal" id="roadmap" aria-label="EVCCF project timeline: five phases across 310 days">
-      <div class="rm-cap"><span>EVCCF program plan</span><span>Sep 2024 → Nov 2025 · 310 days</span></div>
+      <div class="rm-cap"><span>EVCCF program plan</span><span>Sep 2024 to Nov 2025 · 310 days</span></div>
       <div class="rm-track">
         <div class="rm-seg" style="--w:42.9%;--i:0;--sc:#5b7ca0"><span class="rbar"></span><span class="rtx">Planning<small>133d</small></span></div>
         <div class="rm-seg" style="--w:9.7%;--i:1;--sc:#4a6e95"><span class="rbar"></span><span class="rtx">Procure<small>30d</small></span></div>
@@ -295,6 +340,7 @@ p{max-width:66ch}
         <div class="rm-seg" style="--w:9.7%;--i:3;--sc:#2e527a"><span class="rbar"></span><span class="rtx">Train<small>30d</small></span></div>
         <div class="rm-seg" style="--w:11.9%;--i:4;--sc:#223f63"><span class="rbar"></span><span class="rtx">Handover<small>37d</small></span></div>
         <div class="rm-mile"><span class="dia"></span> Go-live</div>
+        <div class="rm-play" aria-hidden="true"></div>
       </div>
     </div>
   </div>
@@ -304,7 +350,7 @@ p{max-width:66ch}
 <section class="section" id="snapshot" style="border-top:0">
   <div class="wrap">
     <div class="eyebrow reveal">Flagship project · by the numbers</div>
-    <h2 class="reveal" style="margin:14px 0 30px">EV Charging for Council Fleets — a $1.8M program plan</h2>
+    <h2 class="reveal" style="margin:14px 0 30px">EV Charging for Council Fleets: a $1.8M program plan</h2>
     <div class="stats reveal">
       <div class="stat"><div class="n"><span class="v" data-to="1.8" data-dec="1" data-pre="$"></span><span class="u">M</span></div><div class="l">Program budget</div></div>
       <div class="stat"><div class="n"><span class="v" data-to="310"></span><span class="u">days</span></div><div class="l">End-to-end schedule</div></div>
@@ -323,13 +369,13 @@ p{max-width:66ch}
     <p class="lead reveal">A full delivery plan for a Victorian Government program to install <b>120 EV charging stations across 57 council sites</b>, part of the broader <i>Destination Charging Across Victoria</i> initiative. Built as a Master's capstone (Deakin University, MIS798) and graded <b>High Distinction</b>. Below, the project-management work it took to plan it. <span style="color:var(--ink-mute)">Hover any card for detail.</span></p>
     <div class="grid g3 reveal" style="margin-top:30px">
       <div class="card hz" tabindex="0"><span class="k">Mandate <span class="cue">hover ›</span></span><h3>Zero-emission fleets</h3><p>Ready 26 councils to run and maintain EV fleets, cut public-sector emissions and seed a second-hand EV market.</p>
-        <div class="more">Delivered across four geographic zones — Western/South-Western, Eastern/South-Eastern, Central/Northern Victoria, and Metropolitan Melbourne. Success meant councils able to operate and maintain EV fleets, local job creation, and alignment to Victoria's net-zero-by-2050 target with interim cuts of 28–33% by 2025.</div>
+        <div class="more">Delivered across four geographic zones: Western/South-Western, Eastern/South-Eastern, Central/Northern Victoria, and Metropolitan Melbourne. Success meant councils able to operate and maintain EV fleets, local job creation, and alignment to Victoria's net-zero-by-2050 target with interim cuts of 28 to 33% by 2025.</div>
       </div>
       <div class="card hz" tabindex="0"><span class="k">Structure <span class="cue">hover ›</span></span><h3>Balanced matrix, 4 zones</h3><p>A Director of Project Management over four zones, with zonal PMs sharing authority with functional directors.</p>
         <div class="more">Dual reporting across Engineering, IT, Operations, Compliance, Finance and HR. Matrix conflict was managed up front with defined roles and escalation paths; the Director of Project Management held cohesion and consistent standards across all zones and 57 sites.</div>
       </div>
       <div class="card hz" tabindex="0"><span class="k">Approach <span class="cue">hover ›</span></span><h3>Plan · cost · de-risk</h3><p>Feasibility, a Level-3 WBS, an MS Project schedule, phase-wise budgeting, and a phased risk register.</p>
-        <div class="more">SWOT + PESTLE feasibility → Statement of Work with AS/NZS acceptance criteria → WBS to Level 3 → MS Project schedule with critical path and slack → phase-wise budget to $1,800,155 → an 18-risk register using a four-quadrant response framework (Avoidance / Mitigation / Transfer / Acceptance).</div>
+        <div class="more">SWOT and PESTLE feasibility, a Statement of Work with AS/NZS acceptance criteria, a WBS to Level 3, an MS Project schedule with critical path and slack, a phase-wise budget to $1,800,155, and an 18-risk register using a four-quadrant response framework (Avoidance / Mitigation / Transfer / Acceptance).</div>
       </div>
     </div>
   </div>
@@ -340,15 +386,15 @@ p{max-width:66ch}
   <div class="wrap">
     <div class="eyebrow reveal">What I did</div>
     <h2 class="reveal" style="margin:14px 0 14px">The project-management work, discipline by discipline</h2>
-    <p class="lead reveal" style="margin-bottom:34px">Across the capstone I worked through the full project-management lifecycle — feasibility to handover.</p>
-    <ul class="rail reveal">
-      <li><span class="dot"></span><div class="ph">Initiation</div><h3>Feasibility &amp; environment scan</h3><p>SWOT and a PESTLE macro-analysis — political funding, an 80% fall in battery cost, AS/NZS 3000 &amp; 5139 compliance, net-zero targets — to test whether the program was viable and suitable to take on.</p></li>
-      <li><span class="dot"></span><div class="ph">Planning</div><h3>Organisation &amp; resourcing design</h3><p>Chose a balanced-matrix structure over four zones, mapped the dual reporting lines, and set an urban-vs-rural outsourcing and recruitment plan to staff dispersed sites.</p></li>
-      <li><span class="dot"></span><div class="ph">Planning</div><h3>Scope &amp; work breakdown</h3><p>Statement of Work (inclusions, exclusions, AS/NZS acceptance criteria) and a Level-3 WBS decomposing the program into five phases and their tasks.</p></li>
-      <li><span class="dot"></span><div class="ph">Scheduling</div><h3>Scheduling in MS Project</h3><p>The 310-day schedule: task dependencies, the critical path, and slack/float analysis, showing which tasks could flex and which would move the finish date. <a href="#schedule">See the schedule ↓</a></p></li>
-      <li><span class="dot"></span><div class="ph">Cost</div><h3>Cost &amp; resource planning</h3><p>Phase-wise budget to $1,800,155 (labour ~77% of cost) using grassroots definitive estimates and learning-curve assumptions for the repetitive multi-site installs.</p></li>
-      <li><span class="dot"></span><div class="ph">Control</div><h3>Risk, governance &amp; performance</h3><p>An 18-risk, phase-by-phase register with a four-quadrant response framework, plus performance measures (KPIs, 360° appraisals, stakeholder feedback) and a conflict-resolution matrix.</p></li>
-    </ul>
+    <p class="lead reveal" style="margin-bottom:20px">Across the capstone I worked through the full project-management lifecycle, from feasibility to handover.</p>
+    <div class="hsteps reveal">
+      <div class="hstep"><span class="hnode"></span><div class="hph">Initiation</div><h3>Feasibility scan</h3><p>SWOT and PESTLE analysis (funding, battery-cost falls, AS/NZS standards, net-zero targets) to test whether the program was viable and worth taking on.</p></div>
+      <div class="hstep"><span class="hnode"></span><div class="hph">Planning</div><h3>Organisation design</h3><p>A balanced-matrix structure over four zones, with an urban and rural outsourcing and recruitment plan to staff dispersed sites.</p></div>
+      <div class="hstep"><span class="hnode"></span><div class="hph">Scope</div><h3>Work breakdown</h3><p>A Statement of Work with AS/NZS acceptance criteria, plus a Level-3 WBS across five phases and their tasks.</p></div>
+      <div class="hstep"><span class="hnode"></span><div class="hph">Schedule</div><h3>MS Project schedule</h3><p>The 310-day plan with dependencies, the critical path and slack analysis. <a class="lnk" href="#schedule">See it below ↓</a></p></div>
+      <div class="hstep"><span class="hnode"></span><div class="hph">Cost</div><h3>Cost &amp; resources</h3><p>Phase-wise budget to $1.8M (labour ~77% of cost) using grassroots estimates and learning-curve assumptions.</p></div>
+      <div class="hstep"><span class="hnode"></span><div class="hph">Control</div><h3>Risk &amp; governance</h3><p>An 18-risk register with a four-quadrant response, plus KPIs, 360° appraisals and a conflict-resolution matrix.</p></div>
+    </div>
   </div>
 </section>
 
@@ -357,12 +403,12 @@ p{max-width:66ch}
   <div class="wrap">
     <div class="eyebrow reveal">The schedule, in MS Project</div>
     <h2 class="reveal" style="margin:14px 0 16px">310 days, five phases, one critical path</h2>
-    <p class="lead reveal">The program was scheduled in Microsoft Project — summary phases, task dependencies, and a critical path running Project Initiation → Regulatory Approvals → Contractor Engagement → Integration → System Testing → Handover. Toggle the highlight to see which tasks carry no slack.</p>
+    <p class="lead reveal">The program was scheduled in Microsoft Project: summary phases, task dependencies, and a critical path running Project Initiation, Regulatory Approvals, Contractor Engagement, Integration, System Testing and Handover. Toggle the highlight to see which tasks carry no slack.</p>
 
     <div class="mspwrap reveal">
       <div class="msp-title">
         <span class="msp-appicon">P</span>
-        <span class="f"><b>EVCCF_Project_Plan.mpp</b> — Project Professional</span>
+        <span class="f"><b>EVCCF_Project_Plan.mpp</b> · Project Professional</span>
         <span class="win-ctrls"><button aria-hidden="true" tabindex="-1">&#8211;</button><button aria-hidden="true" tabindex="-1">&#9633;</button><button class="cls" aria-hidden="true" tabindex="-1">&#10005;</button></span>
       </div>
       <div class="msp-ribbon"><span class="file">File</span><span class="tab on">Task</span><span class="tab">Resource</span><span class="tab">Report</span><span class="tab">Project</span><span class="tab">View</span><span class="tab">Format</span></div>
@@ -374,7 +420,7 @@ p{max-width:66ch}
       <div class="gantt" id="gantt">
         <div class="gcol">
           <div class="gt-head"><span>ID</span><span>Task Name</span><span>Dur.</span></div>
-          <div class="grow proj"><span class="id">0</span><span class="nm">EVCCF — Project Plan</span><span class="du">310 d</span></div>
+          <div class="grow proj"><span class="id">0</span><span class="nm">EVCCF Project Plan</span><span class="du">310 d</span></div>
           <div class="grow sum"><span class="id">1</span><span class="nm">Planning &amp; Site Selection</span><span class="du">133 d</span></div>
           <div class="grow child"><span class="id">2</span><span class="nm">Project Initiation</span><span class="du">20 d</span></div>
           <div class="grow child"><span class="id">3</span><span class="nm">Site Assessments</span><span class="du">70 d</span></div>
@@ -424,22 +470,22 @@ p{max-width:66ch}
     </div>
     <p class="msp-note reveal">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-      <span>Recreated depiction for interactive purposes — this schedule view has been rebuilt for the web from the actual Microsoft Project (.mpp) schedule produced for the EVCCF plan. Dates, durations, critical path and slack reflect that plan.</span>
+      <span>Recreated depiction for interactive purposes. This schedule view has been rebuilt for the web from the actual Microsoft Project (.mpp) schedule produced for the EVCCF plan. Dates, durations, critical path and slack reflect that plan.</span>
     </p>
 
     <h3 class="reveal" style="margin:52px 0 6px;font-size:22px">Phase timeline &amp; budget weighting</h3>
-    <p class="reveal" style="color:var(--ink-mute);font-size:14px;margin-bottom:8px">Bar length = share of the $1.8M budget. Installation and early planning carry the weight.</p>
+    <p class="reveal" style="color:var(--ink-mute);font-size:14px;margin-bottom:8px">Bar length is the share of the $1.8M budget. Installation and early planning carry the weight.</p>
     <div class="phases">
-      <div class="phase reveal"><div class="pn">Planning &amp; Site Selection<small>09 Sep 24 – 10 Mar 25 · 133 d</small></div><div class="track"><span class="fill" style="--w:35.3%"></span></div><div class="amt">$634,935 <small>· 35.3%</small></div></div>
-      <div class="phase reveal"><div class="pn">Procurement &amp; Contractor<small>11 Mar – 18 Apr 25 · 30 d</small></div><div class="track"><span class="fill" style="--w:7.2%"></span></div><div class="amt">$129,900 <small>· 7.2%</small></div></div>
-      <div class="phase reveal"><div class="pn">Installation &amp; Integration<small>21 Apr – 06 Aug 25 · 80 d</small></div><div class="track"><span class="fill" style="--w:38.9%"></span></div><div class="amt">$700,800 <small>· 38.9%</small></div></div>
-      <div class="phase reveal"><div class="pn">Training &amp; Testing<small>07 Aug – 17 Sep 25 · 30 d</small></div><div class="track"><span class="fill" style="--w:8.0%"></span></div><div class="amt">$143,920 <small>· 8.0%</small></div></div>
-      <div class="phase reveal"><div class="pn">Completion &amp; Handover<small>18 Sep – 07 Nov 25 · 37 d</small></div><div class="track"><span class="fill" style="--w:10.6%"></span></div><div class="amt">$190,600 <small>· 10.6%</small></div></div>
+      <div class="phase reveal"><div class="pn">Planning &amp; Site Selection<small>09 Sep 24 to 10 Mar 25 · 133 d</small></div><div class="track"><span class="fill" style="--w:35.3%"></span></div><div class="amt">$634,935 <small>· 35.3%</small></div></div>
+      <div class="phase reveal"><div class="pn">Procurement &amp; Contractor<small>11 Mar to 18 Apr 25 · 30 d</small></div><div class="track"><span class="fill" style="--w:7.2%"></span></div><div class="amt">$129,900 <small>· 7.2%</small></div></div>
+      <div class="phase reveal"><div class="pn">Installation &amp; Integration<small>21 Apr to 06 Aug 25 · 80 d</small></div><div class="track"><span class="fill" style="--w:38.9%"></span></div><div class="amt">$700,800 <small>· 38.9%</small></div></div>
+      <div class="phase reveal"><div class="pn">Training &amp; Testing<small>07 Aug to 17 Sep 25 · 30 d</small></div><div class="track"><span class="fill" style="--w:8.0%"></span></div><div class="amt">$143,920 <small>· 8.0%</small></div></div>
+      <div class="phase reveal"><div class="pn">Completion &amp; Handover<small>18 Sep to 07 Nov 25 · 37 d</small></div><div class="track"><span class="fill" style="--w:10.6%"></span></div><div class="amt">$190,600 <small>· 10.6%</small></div></div>
     </div>
 
     <div class="grid g3 reveal" style="margin-top:26px">
-      <div class="card"><span class="k">Critical path</span><h3>6 tasks, zero slack</h3><p>Initiation, Regulatory Approvals, Contractor Engagement, Integration, System Testing and Handover set the finish date — any slip here slips 07 Nov 25.</p></div>
-      <div class="card"><span class="k">Float identified</span><h3>Where the slack sits</h3><p>Site Assessments carries 39 days of float, Installation 28 days, Procurement 5 — flexibility used to smooth resourcing without risking the deadline.</p></div>
+      <div class="card"><span class="k">Critical path</span><h3>6 tasks, zero slack</h3><p>Initiation, Regulatory Approvals, Contractor Engagement, Integration, System Testing and Handover set the finish date; any slip here slips 07 Nov 25.</p></div>
+      <div class="card"><span class="k">Float identified</span><h3>Where the slack sits</h3><p>Site Assessments carries 39 days of float, Installation 28 days, Procurement 5. That flexibility smooths resourcing without risking the deadline.</p></div>
       <div class="card"><span class="k">Estimating</span><h3>Definitive + learning curves</h3><p>Grassroots build-up estimates from vendor quotes, with learning-curve efficiencies across the repetitive multi-site installs.</p></div>
     </div>
   </div>
@@ -449,15 +495,76 @@ p{max-width:66ch}
 <section class="section" id="risk">
   <div class="wrap">
     <div class="eyebrow reveal">Risk &amp; governance</div>
-    <h2 class="reveal" style="margin:14px 0 22px">18 risks, phase by phase — a strategy for each</h2>
+    <h2 class="reveal" style="margin:14px 0 22px">18 risks, phase by phase, a strategy for each</h2>
+
+    <p class="rsub reveal">Highest-rated risks, at a glance</p>
     <div class="card reveal" style="padding:8px 24px">
       <div class="risk-row"><div class="rn">Poor scope definition<small>Phase 1 · scope creep, cost &amp; schedule impact</small></div><span class="pill hi">High</span><span class="pill strat">Avoidance</span></div>
       <div class="risk-row"><div class="rn">Delays in regulatory approvals<small>Phase 1 · long approval processes</small></div><span class="pill hi">High</span><span class="pill strat">Avoidance</span></div>
       <div class="risk-row"><div class="rn">Inaccurate cost estimates<small>Phase 2 · budget overruns</small></div><span class="pill hi">High</span><span class="pill strat">Mitigation</span></div>
+      <div class="risk-row"><div class="rn">Technical integration issues<small>Phase 3 · integration with existing systems</small></div><span class="pill hi">High</span><span class="pill strat">Mitigation</span></div>
       <div class="risk-row"><div class="rn">Contractor unavailability<small>Phase 2 · installation delays</small></div><span class="pill med">Medium</span><span class="pill strat">Transfer · penalty clauses</span></div>
-      <div class="risk-row"><div class="rn">Unavailable subject-matter experts<small>Phase 1 · feasibility delays</small></div><span class="pill med">Medium</span><span class="pill strat">Mitigation · cross-training</span></div>
     </div>
-    <p class="reveal" style="color:var(--ink-mute);font-size:13.5px;margin-top:14px">A representative five of the eighteen. Each carried a qualitative rating and a documented four-quadrant response, with governance layered on top: KPI tracking, 360° appraisals, stakeholder surveys and a common code of ethics.</p>
+
+    <p class="rsub reveal" style="margin-top:40px">Risk matrix · count by severity and phase</p>
+    <div class="matrix-wrap reveal">
+      <div class="matrix">
+        <div class="mh corner">Severity ↓ / Phase →</div>
+        <div class="mh">P1<br>Planning</div><div class="mh">P2<br>Procure</div><div class="mh">P3<br>Install</div><div class="mh">P4<br>Train/Test</div><div class="mh">P5<br>Handover</div>
+        <div class="ml"><span class="d" style="background:var(--red)"></span>High</div>
+        <div class="cell" style="background:color-mix(in srgb,var(--red) 34%,var(--surface))"><span class="c">2</span><span class="cl">high</span></div>
+        <div class="cell" style="background:color-mix(in srgb,var(--red) 20%,var(--surface))"><span class="c">1</span><span class="cl">high</span></div>
+        <div class="cell" style="background:color-mix(in srgb,var(--red) 66%,var(--surface))"><span class="c">4</span><span class="cl">high</span></div>
+        <div class="cell" style="background:color-mix(in srgb,var(--red) 20%,var(--surface))"><span class="c">1</span><span class="cl">high</span></div>
+        <div class="cell" style="background:color-mix(in srgb,var(--red) 34%,var(--surface))"><span class="c">2</span><span class="cl">high</span></div>
+        <div class="ml"><span class="d" style="background:var(--amber)"></span>Medium</div>
+        <div class="cell" style="background:color-mix(in srgb,var(--amber) 34%,var(--surface))"><span class="c">2</span><span class="cl">med</span></div>
+        <div class="cell" style="background:color-mix(in srgb,var(--amber) 34%,var(--surface))"><span class="c">2</span><span class="cl">med</span></div>
+        <div class="cell" style="background:color-mix(in srgb,var(--amber) 20%,var(--surface))"><span class="c">1</span><span class="cl">med</span></div>
+        <div class="cell" style="background:color-mix(in srgb,var(--amber) 20%,var(--surface))"><span class="c">1</span><span class="cl">med</span></div>
+        <div class="cell" style="background:color-mix(in srgb,var(--amber) 20%,var(--surface))"><span class="c">1</span><span class="cl">med</span></div>
+        <div class="ml"><span class="d" style="background:var(--green)"></span>Low</div>
+        <div class="cell empty"><span class="c">0</span></div>
+        <div class="cell empty"><span class="c">0</span></div>
+        <div class="cell empty"><span class="c">0</span></div>
+        <div class="cell" style="background:color-mix(in srgb,var(--green) 22%,var(--surface))"><span class="c">1</span><span class="cl">low</span></div>
+        <div class="cell empty"><span class="c">0</span></div>
+      </div>
+      <div class="matrix-cap">
+        <span><i style="background:color-mix(in srgb,var(--red) 50%,var(--surface))"></i>Higher count = darker cell</span>
+        <span>10 High · 7 Medium · 1 Low · 18 total</span>
+      </div>
+    </div>
+
+    <p class="rsub reveal" style="margin-top:40px">Full risk register · all 18 risks</p>
+    <div class="regwrap reveal">
+      <div class="regscroll">
+        <table class="reg">
+          <thead><tr><th>Risk event</th><th>Phase</th><th>Rating</th><th>Response strategy</th></tr></thead>
+          <tbody>
+            <tr><td class="rk">Poor definition of project scope</td><td class="ph">P1</td><td><span class="pill hi">High</span></td><td>Avoidance · clear scope documentation from the start</td></tr>
+            <tr><td class="rk">Delays in regulatory approvals</td><td class="ph">P1</td><td><span class="pill hi">High</span></td><td>Avoidance · early regulatory engagement and tracking</td></tr>
+            <tr><td class="rk">Unavailable subject-matter experts</td><td class="ph">P1</td><td><span class="pill med">Medium</span></td><td>Mitigation · backup personnel and cross-training</td></tr>
+            <tr><td class="rk">Inaccurate feasibility studies</td><td class="ph">P1</td><td><span class="pill med">Medium</span></td><td>Mitigation · double-check studies and add contingencies</td></tr>
+            <tr><td class="rk">Inaccurate cost estimates</td><td class="ph">P2</td><td><span class="pill hi">High</span></td><td>Mitigation · detailed cost analysis and research</td></tr>
+            <tr><td class="rk">Vendor selection delays</td><td class="ph">P2</td><td><span class="pill med">Medium</span></td><td>Acceptance · buffer time for selection</td></tr>
+            <tr><td class="rk">Contractor unavailability</td><td class="ph">P2</td><td><span class="pill med">Medium</span></td><td>Transfer · penalty clauses in contracts</td></tr>
+            <tr><td class="rk">Inadequate contractor expertise</td><td class="ph">P3</td><td><span class="pill hi">High</span></td><td>Avoidance · select contractors with proven expertise</td></tr>
+            <tr><td class="rk">Material availability</td><td class="ph">P3</td><td><span class="pill hi">High</span></td><td>Transfer · supplier contracts with late-delivery penalties</td></tr>
+            <tr><td class="rk">Technical integration issues</td><td class="ph">P3</td><td><span class="pill hi">High</span></td><td>Mitigation · pre-installation compatibility testing</td></tr>
+            <tr><td class="rk">Regulatory compliance &amp; safety issues</td><td class="ph">P3</td><td><span class="pill hi">High</span></td><td>Avoidance · regular testing to ensure compliance</td></tr>
+            <tr><td class="rk">Site preparation delays</td><td class="ph">P3</td><td><span class="pill med">Medium</span></td><td>Acceptance · buffer time in the schedule</td></tr>
+            <tr><td class="rk">System testing failures</td><td class="ph">P4</td><td><span class="pill hi">High</span></td><td>Mitigation · rigorous testing during integration</td></tr>
+            <tr><td class="rk">Staff availability for training</td><td class="ph">P4</td><td><span class="pill med">Medium</span></td><td>Acceptance · flexible schedules and multiple sessions</td></tr>
+            <tr><td class="rk">Training material development delays</td><td class="ph">P4</td><td><span class="pill lo">Low</span></td><td>Mitigation · early development and clear deadlines</td></tr>
+            <tr><td class="rk">Poor quality assurance</td><td class="ph">P5</td><td><span class="pill hi">High</span></td><td>Avoidance · consistent quality checks throughout</td></tr>
+            <tr><td class="rk">Unacceptable handover to stakeholders</td><td class="ph">P5</td><td><span class="pill hi">High</span></td><td>Mitigation · involve stakeholders throughout</td></tr>
+            <tr><td class="rk">Cash flow problems</td><td class="ph">P5</td><td><span class="pill med">Medium</span></td><td>Acceptance · regular financial reviews and contingency funds</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <p class="reveal" style="color:var(--ink-mute);font-size:13px;margin-top:12px;font-style:italic">Rebuilt for the web from the risk register in the EVCCF report. Each risk carried a qualitative rating and a four-quadrant response (Avoidance, Mitigation, Transfer, Acceptance), with governance layered on top: KPI tracking, 360° appraisals, stakeholder surveys and a common code of ethics.</p>
   </div>
 </section>
 
@@ -467,23 +574,23 @@ p{max-width:66ch}
     <div class="eyebrow reveal">Now</div>
     <div class="now-head reveal">
       <span class="t">Business Development Manager · <span class="co">Franco &amp; Co Group</span></span>
-      <span class="dt">Melbourne · Oct 2024 – Present</span>
+      <span class="dt">Melbourne · Oct 2024 to Present</span>
     </div>
-    <p class="lead reveal">A multi-site operations and delivery role: I coordinate work, people and compliance across <b>three high-volume venues</b>, reporting to senior leadership — the day-to-day practice of the project-management disciplines above.</p>
+    <p class="lead reveal">A multi-site operations and delivery role: I coordinate work, people and compliance across <b>three high-volume venues</b>, reporting to senior leadership. It is the day-to-day practice of the project-management disciplines above.</p>
     <div class="now-stats reveal">
       <div class="ns"><b>~50</b><span>Staff coordinated</span></div>
       <div class="ns"><b>3</b><span>Operational sites</span></div>
       <div class="ns"><b>35%</b><span>Backend cost cut</span></div>
     </div>
     <div class="grid g2 reveal" style="margin-top:22px">
-      <div class="card hz" tabindex="0"><span class="k">Delivery &amp; coordination <span class="cue">hover ›</span></span><h3>Running three sites at once</h3><p>Direct ~50 staff across three sites — rostering, resource allocation, performance management and day-to-day delivery.</p>
-        <div class="more">Balancing people and priorities across concurrent operations: allocating resource to where the load is, resolving conflicts, and keeping each venue delivering to standard — the same coordination discipline as running project workstreams in parallel.</div></div>
+      <div class="card hz" tabindex="0"><span class="k">Delivery &amp; coordination <span class="cue">hover ›</span></span><h3>Running three sites at once</h3><p>Direct ~50 staff across three sites: rostering, resource allocation, performance management and day-to-day delivery.</p>
+        <div class="more">Balancing people and priorities across concurrent operations: allocating resource to where the load is, resolving conflicts, and keeping each venue delivering to standard. The same coordination discipline as running project workstreams in parallel.</div></div>
       <div class="card hz" tabindex="0"><span class="k">Governance &amp; compliance <span class="cue">hover ›</span></span><h3>Frameworks &amp; CAPA tracking</h3><p>Built and maintained compliance frameworks, CAPA tracking and corrective-action registers across three sites.</p>
-        <div class="more">Operational policies, workflow documentation and governance records supporting regulatory compliance, staff-conduct standards and organisational accountability — with structured reporting to senior leadership on compliance outcomes and risk status.</div></div>
+        <div class="more">Operational policies, workflow documentation and governance records supporting regulatory compliance, staff-conduct standards and organisational accountability, with structured reporting to senior leadership on compliance outcomes and risk status.</div></div>
       <div class="card hz" tabindex="0"><span class="k">Stakeholder reporting <span class="cue">hover ›</span></span><h3>Briefings that drive decisions</h3><p>Structured written briefings to senior leadership on compliance status, operational risk, project performance and financial outcomes.</p>
-        <div class="more">Translating multi-site operational data into concise decision-ready briefings — the reporting cadence leadership relies on to steer resourcing, spend and risk across the group.</div></div>
-      <div class="card hz" tabindex="0"><span class="k">Process improvement <span class="cue">hover ›</span></span><h3>-35% backend cost</h3><p>Identified and implemented improvements cutting backend operating costs by over 35% through evidence-based consolidation.</p>
-        <div class="more">Systematic analysis of where cost and effort were being lost, then consolidation of processes and vendors — a measurable efficiency gain delivered without disrupting front-line operations across the three venues.</div></div>
+        <div class="more">Translating multi-site operational data into concise decision-ready briefings: the reporting cadence leadership relies on to steer resourcing, spend and risk across the group.</div></div>
+      <div class="card hz" tabindex="0"><span class="k">Process improvement <span class="cue">hover ›</span></span><h3>35% lower backend cost</h3><p>Identified and implemented improvements cutting backend operating costs by over 35% through evidence-based consolidation.</p>
+        <div class="more">Systematic analysis of where cost and effort were being lost, then consolidation of processes and vendors: a measurable efficiency gain delivered without disrupting front-line operations across the three venues.</div></div>
     </div>
   </div>
 </section>
@@ -492,7 +599,7 @@ p{max-width:66ch}
 <section class="section" id="skills">
   <div class="wrap">
     <div class="eyebrow reveal">Toolkit</div>
-    <h2 class="reveal" style="margin:14px 0 8px">Methods &amp; tools — with where I've used them</h2>
+    <h2 class="reveal" style="margin:14px 0 8px">Methods &amp; tools, with where I've used them</h2>
     <p class="reveal" style="color:var(--ink-mute);font-size:14px;margin-bottom:26px">Hover any tile for a real example.</p>
     <div class="grid g3 reveal">
       <div class="card hz" tabindex="0"><span class="k">Microsoft Project <span class="cue">hover ›</span></span><h3>Scheduling &amp; Gantt</h3><p>Task breakdown, dependencies and timeline management.</p>
@@ -510,7 +617,7 @@ p{max-width:66ch}
       <div class="card hz" tabindex="0"><span class="k">Stakeholder Reporting <span class="cue">hover ›</span></span><h3>Briefings &amp; governance docs</h3><p>Decision-ready reporting to senior leadership.</p>
         <div class="more"><b>Used at Franco &amp; Co:</b> structured briefings on compliance status, operational risk, project performance and financial outcomes across three sites.</div></div>
       <div class="card hz" tabindex="0"><span class="k">Resource Coordination <span class="cue">hover ›</span></span><h3>People &amp; scheduling</h3><p>Allocating effort across concurrent workstreams.</p>
-        <div class="more"><b>Used at Franco &amp; Co:</b> coordinate ~50 staff across three high-volume sites — rostering, performance management and day-to-day resource allocation.</div></div>
+        <div class="more"><b>Used at Franco &amp; Co:</b> coordinate ~50 staff across three high-volume sites: rostering, performance management and day-to-day resource allocation.</div></div>
       <div class="card hz" tabindex="0"><span class="k">Process Improvement <span class="cue">hover ›</span></span><h3>Efficiency &amp; consolidation</h3><p>Evidence-based redesign of how work flows.</p>
         <div class="more"><b>Used at Franco &amp; Co:</b> cut backend operating costs by over 35% through systematic analysis and evidence-based consolidation.</div></div>
     </div>
@@ -528,8 +635,8 @@ p{max-width:66ch}
     <div class="eyebrow reveal">Qualifications</div>
     <h2 class="reveal" style="margin:14px 0 22px">Education</h2>
     <div class="edu reveal">
-      <div class="row"><div class="deg">Master of Information Systems — Project Management specialisation<small>Deakin University, Burwood, Victoria</small><div class="hon">Distinction (Project Management unit) · Capstone: High Distinction</div></div><div class="yr">2026</div></div>
-      <div class="row"><div class="deg">Integrated B.Com. LL.B — five-year Law &amp; Commerce degree<small>Christ Academy Institute of Law, Bengaluru, India</small><div class="hon">Best Advocate · Best Moot Team · President, Student Bar Association (800+ members) · 2 peer-reviewed international publications</div></div><div class="yr">2023</div></div>
+      <div class="row"><div class="deg">Master of Information Systems, Project Management specialisation<small>Deakin University, Burwood, Victoria</small><div class="hon">Distinction (Project Management unit) · Capstone: High Distinction</div></div><div class="yr">2026</div></div>
+      <div class="row"><div class="deg">Integrated B.Com. LL.B, five-year Law &amp; Commerce degree<small>Christ Academy Institute of Law, Bengaluru, India</small><div class="hon">Best Advocate · Best Moot Team · President, Student Bar Association (800+ members) · 2 peer-reviewed international publications</div></div><div class="yr">2023</div></div>
     </div>
   </div>
 </section>
@@ -565,7 +672,6 @@ p{max-width:66ch}
   var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('reveal-in');io.unobserve(en.target);}});},{threshold:.12});
   document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
 
-  /* hero roadmap animate on load */
   var road=document.getElementById('roadmap');
   if(road){requestAnimationFrame(function(){requestAnimationFrame(function(){road.classList.add('go');});});}
 
@@ -581,14 +687,12 @@ p{max-width:66ch}
     else countUp(el);sio.unobserve(el);}});},{threshold:.6});
   document.querySelectorAll('.stat .v').forEach(function(el){sio.observe(el);});
 
-  /* gantt month header + grid */
   var gh=document.getElementById('ghead'),gg=document.getElementById('ggrid');
   var months=[['Sep',5.2],['Oct',5.2],['Nov',7.3],['Dec',7.3],['Jan',7.3],['Feb',6.6],['Mar',7.3],['Apr',7.1],['May',7.3],['Jun',7.1],['Jul',7.3],['Aug',7.3],['Sep',7.1],['Oct',7.3],['Nov',4.0]];
   var acc=0;months.forEach(function(m){var mo=document.createElement('div');mo.className='mo';mo.style.left=acc+'%';mo.textContent=m[0];gh.appendChild(mo);var v=document.createElement('div');v.className='v';v.style.left=acc+'%';gg.appendChild(v);acc+=m[1];});
   var gio=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('reveal-g');gio.unobserve(en.target);}});},{threshold:.2});
   gio.observe(document.querySelector('.mspwrap'));
 
-  /* critical-path toggle */
   var cp=document.getElementById('cpToggle');
   function toggleCP(){cp.classList.toggle('on');var on=cp.classList.contains('on');
     document.querySelectorAll('#gantt .bar').forEach(function(b){
@@ -597,11 +701,10 @@ p{max-width:66ch}
   cp.addEventListener('click',toggleCP);
   cp.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleCP();}});
 
-  /* email copy + confirmation */
   var eb=document.getElementById('emailBtn'),toast=document.getElementById('toast'),tT;
   function showToast(msg){if(!toast)return;toast.textContent=msg;toast.classList.add('show');clearTimeout(tT);tT=setTimeout(function(){toast.classList.remove('show');},2800);}
   if(eb){eb.addEventListener('click',function(){var em='rahultvmin@gmail.com';
-    try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(em).then(function(){showToast('Copied '+em+' — opening your email app…');},function(){showToast(em);});}
+    try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(em).then(function(){showToast('Copied '+em+', opening your email app');},function(){showToast(em);});}
       else showToast(em);}catch(e){showToast(em);}});}
 })();
 </script>
