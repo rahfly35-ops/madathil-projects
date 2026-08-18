@@ -303,6 +303,37 @@ p{max-width:66ch}
   transition:opacity .3s,transform .3s;z-index:60;box-shadow:0 10px 34px rgba(0,0,0,.3)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
+/* scroll progress */
+.scrollprog{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--brand),var(--green));z-index:60;transition:width .12s linear}
+
+/* phase detail critical chips */
+.rd-tasks span.crit{border-color:color-mix(in srgb,var(--red) 45%,var(--border));color:var(--red);background:color-mix(in srgb,var(--red) 8%,var(--surface))}
+.rd-tasks span.crit::before{content:"●";color:var(--red);margin-right:5px;font-size:9px;vertical-align:1px}
+.rd-legend{margin-top:10px;font-size:11px;color:var(--ink-mute);display:flex;align-items:center;gap:7px}
+.rd-legend .cdot{width:8px;height:8px;border-radius:50%;background:var(--red);display:inline-block}
+
+/* gantt task explorer */
+.grow{cursor:pointer}
+.grow.sel{background:color-mix(in srgb,var(--amber) 16%,transparent)}
+.gbrow.sel{background:color-mix(in srgb,var(--amber) 10%,transparent)}
+.gbrow.sel .bar{filter:brightness(1.12)}
+.grow:focus-visible{outline:2px solid var(--amber);outline-offset:-2px}
+.gtt-hint{font-size:12px;color:var(--ink-mute);font-style:italic;margin:14px 2px 0}
+.gtt-detail{margin-top:10px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:15px 18px;box-shadow:var(--shadow)}
+.gtt-detail.flip{animation:rdfade .35s ease}
+.gd-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px}
+.gd-name{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--ink)}
+.gd-ph{font-family:ui-monospace,Consolas,monospace;font-size:11px;color:var(--ink-mute);text-transform:uppercase;letter-spacing:.06em}
+.gd-flag{margin-left:auto;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:4px 11px;border-radius:999px}
+.gd-flag.crit{background:color-mix(in srgb,var(--red) 15%,transparent);color:var(--red)}
+.gd-flag.ok{background:color-mix(in srgb,var(--green) 16%,transparent);color:var(--green)}
+.gd-flag.sum{background:var(--surface-2);color:var(--ink-dim)}
+.gd-fields{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.gd-fields>div{display:flex;flex-direction:column;gap:3px}
+.gd-fields span{font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-mute);font-weight:600}
+.gd-fields b{font-family:ui-monospace,Consolas,monospace;font-size:13.5px;color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+@media(max-width:640px){.gd-fields{grid-template-columns:repeat(2,1fr)}}
+
 /* reveal */
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
 .reveal.reveal-in{opacity:1;transform:none}
@@ -315,6 +346,7 @@ p{max-width:66ch}
 }
 </style>
 
+<div class="scrollprog" id="prog" aria-hidden="true"></div>
 <nav class="nav" id="nav">
   <div class="brand"><span class="mk">◆</span> Madathil&nbsp;Projects</div>
   <div class="nav-links">
@@ -335,7 +367,7 @@ p{max-width:66ch}
   <div class="wrap hero-inner">
     <span class="kick reveal">Project Management Portfolio · <b>Open to work</b></span>
     <h1 class="reveal">Rahul&nbsp;Madathil<br><span class="thin">plans that get built.</span></h1>
-    <p class="role reveal">A project manager who turns ambiguous briefs into <b>scheduled, costed, de-risked plans</b>: work breakdown and critical path, budgets, resourcing and stakeholder governance.</p>
+    <p class="role reveal">Early in a project-management career, targeting <b>project coordinator and project officer</b> roles. I turn ambiguous briefs into scheduled, costed, de-risked plans: work breakdown and critical path, budgets, resourcing and stakeholder governance.</p>
     <div class="chips reveal">
       <span class="chip">📍 Melbourne, Australia</span>
       <span class="chip"><b>Full Australian work rights until March 2029</b></span>
@@ -357,6 +389,7 @@ p{max-width:66ch}
         <div class="rd-top"><span class="rd-name"></span><span class="rd-meta"></span></div>
         <p class="rd-desc"></p>
         <div class="rd-tasks"></div>
+        <div class="rd-legend"><span class="cdot"></span> Highlighted tasks are on the critical path (zero slack)</div>
       </div>
     </div>
   </div>
@@ -482,6 +515,17 @@ p{max-width:66ch}
         <span><i style="background:var(--red)"></i>Critical path</span>
         <span><i style="background:var(--msp-sum);height:6px"></i>Summary phase</span>
         <span class="mono">Durations in working days</span>
+      </div>
+    </div>
+    <p class="gtt-hint reveal">Click any task, row or bar, to inspect its dates, predecessor and float.</p>
+    <div class="gtt-detail reveal" id="gttDetail" aria-live="polite">
+      <div class="gd-head"><span class="gd-name"></span><span class="gd-ph"></span><span class="gd-flag"></span></div>
+      <div class="gd-fields">
+        <div><span>Duration</span><b class="gd-du"></b></div>
+        <div><span>Start</span><b class="gd-st"></b></div>
+        <div><span>Finish</span><b class="gd-fi"></b></div>
+        <div><span>Predecessor</span><b class="gd-pr"></b></div>
+        <div><span>Slack / float</span><b class="gd-sl"></b></div>
       </div>
     </div>
     <p class="msp-note reveal">
@@ -682,7 +726,12 @@ p{max-width:66ch}
     root.setAttribute('data-theme',next);try{localStorage.setItem('mp-theme',next);}catch(e){}
   });
   var nav=document.getElementById('nav');
-  addEventListener('scroll',function(){nav.classList.toggle('scrolled',scrollY>20);},{passive:true});
+  var prog=document.getElementById('prog');
+  function onScroll(){
+    nav.classList.toggle('scrolled',scrollY>20);
+    if(prog){var h=document.documentElement.scrollHeight-innerHeight;prog.style.width=(h>0?Math.min(scrollY/h,1)*100:0).toFixed(1)+'%';}
+  }
+  addEventListener('scroll',onScroll,{passive:true});addEventListener('resize',onScroll);onScroll();
   var rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
 
   var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('reveal-in');io.unobserve(en.target);}});},{threshold:.12});
@@ -693,11 +742,11 @@ p{max-width:66ch}
 
   /* viewer-driven phase explorer */
   var PH=[
-    {n:'Planning & Site Selection',d:'133 days',dt:'09 Sep 24 to 10 Mar 25',b:'$634,935 (35.3%)',desc:'Feasibility studies, site selection across 57 council sites, and securing regulatory approvals. The longest phase, and the second-largest slice of budget.',t:['Project Initiation','Site Assessments','Regulatory Approvals']},
-    {n:'Procurement & Contractor Engagement',d:'30 days',dt:'11 Mar to 18 Apr 25',b:'$129,900 (7.2%)',desc:'Selecting vendors and contractors and procuring equipment, synchronised with the schedule to keep the plan moving.',t:['Procurement','Contractor Engagement']},
-    {n:'Installation & Integration',d:'80 days',dt:'21 Apr to 06 Aug 25',b:'$700,800 (38.9%)',desc:'Installing the 120 charging stations and integrating smart-charging software across sites. The largest phase by budget, run with contractors and engineers in parallel.',t:['Installation','Integration']},
-    {n:'Training & Testing',d:'30 days',dt:'07 Aug to 17 Sep 25',b:'$143,920 (8.0%)',desc:'Training council staff to operate and maintain the network while system testing runs concurrently.',t:['Staff Training','System Testing']},
-    {n:'Completion & Handover',d:'37 days',dt:'18 Sep to 07 Nov 25',b:'$190,600 (10.6%)',desc:'Final quality assurance, inspections and sign-off, then handover of the completed infrastructure to the councils.',t:['Final Quality Assurance','Handover']}
+    {n:'Planning & Site Selection',d:'133 days',dt:'09 Sep 24 to 10 Mar 25',b:'$634,935 (35.3%)',desc:'Feasibility studies, site selection across 57 council sites, and securing regulatory approvals. The longest phase, and the second-largest slice of budget.',t:[{n:'Project Initiation',c:1},{n:'Site Assessments',c:0},{n:'Regulatory Approvals',c:1}]},
+    {n:'Procurement & Contractor Engagement',d:'30 days',dt:'11 Mar to 18 Apr 25',b:'$129,900 (7.2%)',desc:'Selecting vendors and contractors and procuring equipment, synchronised with the schedule to keep the plan moving.',t:[{n:'Procurement',c:0},{n:'Contractor Engagement',c:1}]},
+    {n:'Installation & Integration',d:'80 days',dt:'21 Apr to 06 Aug 25',b:'$700,800 (38.9%)',desc:'Installing the 120 charging stations and integrating smart-charging software across sites. The largest phase by budget, run with contractors and engineers in parallel.',t:[{n:'Installation',c:0},{n:'Integration',c:1}]},
+    {n:'Training & Testing',d:'30 days',dt:'07 Aug to 17 Sep 25',b:'$143,920 (8.0%)',desc:'Training council staff to operate and maintain the network while system testing runs concurrently.',t:[{n:'Staff Training',c:0},{n:'System Testing',c:1}]},
+    {n:'Completion & Handover',d:'37 days',dt:'18 Sep to 07 Nov 25',b:'$190,600 (10.6%)',desc:'Final quality assurance, inspections and sign-off, then handover of the completed infrastructure to the councils.',t:[{n:'Final Quality Assurance',c:0},{n:'Handover',c:1}]}
   ];
   if(road){
     var segs=road.querySelectorAll('.rm-seg'),det=document.getElementById('rmDetail');
@@ -707,7 +756,7 @@ p{max-width:66ch}
       det.querySelector('.rd-name').textContent=p.n;
       det.querySelector('.rd-meta').innerHTML='<b>'+p.d+'</b> · '+p.dt+' · '+p.b;
       det.querySelector('.rd-desc').textContent=p.desc;
-      det.querySelector('.rd-tasks').innerHTML=p.t.map(function(x){return '<span>'+x+'</span>';}).join('');
+      det.querySelector('.rd-tasks').innerHTML=p.t.map(function(x){return '<span class="'+(x.c?'crit':'')+'">'+x.n+'</span>';}).join('');
       det.classList.remove('flip');void det.offsetWidth;det.classList.add('flip');
     }
     Array.prototype.forEach.call(segs,function(s,k){
@@ -749,6 +798,57 @@ p{max-width:66ch}
       else if(!b.classList.contains('sumbar'))b.style.opacity=on?.22:1;});}
   cp.addEventListener('click',toggleCP);
   cp.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleCP();}});
+
+  /* gantt click-to-explore */
+  var TASK=[
+    {n:'EVCCF Project Plan',ph:'Program',du:'310 d',st:'09/09/24',fi:'07/11/25',pr:'None',sl:'N/A',cr:0,sum:1},
+    {n:'Planning & Site Selection',ph:'Phase 1',du:'133 d',st:'09/09/24',fi:'10/03/25',pr:'None',sl:'N/A',cr:0,sum:1},
+    {n:'Project Initiation',ph:'Phase 1',du:'20 d',st:'09/09/24',fi:'04/10/24',pr:'None',sl:'0 d',cr:1},
+    {n:'Site Assessments',ph:'Phase 1',du:'70 d',st:'07/10/24',fi:'10/01/25',pr:'2',sl:'39 d',cr:0},
+    {n:'Regulatory Approvals',ph:'Phase 1',du:'43 d',st:'13/01/25',fi:'10/03/25',pr:'3',sl:'0 d',cr:1},
+    {n:'Procurement & Contractor Eng.',ph:'Phase 2',du:'30 d',st:'11/03/25',fi:'18/04/25',pr:'1',sl:'N/A',cr:0,sum:1},
+    {n:'Procurement',ph:'Phase 2',du:'25 d',st:'11/03/25',fi:'11/04/25',pr:'4',sl:'5 d',cr:0},
+    {n:'Contractor Engagement',ph:'Phase 2',du:'30 d',st:'11/03/25',fi:'18/04/25',pr:'4',sl:'0 d',cr:1},
+    {n:'Installation & Integration',ph:'Phase 3',du:'80 d',st:'21/04/25',fi:'06/08/25',pr:'5',sl:'N/A',cr:0,sum:1},
+    {n:'Installation',ph:'Phase 3',du:'52 d',st:'21/04/25',fi:'27/06/25',pr:'7',sl:'28 d',cr:0},
+    {n:'Integration',ph:'Phase 3',du:'80 d',st:'21/04/25',fi:'06/08/25',pr:'7',sl:'0 d',cr:1},
+    {n:'Training & Testing',ph:'Phase 4',du:'30 d',st:'07/08/25',fi:'17/09/25',pr:'8',sl:'N/A',cr:0,sum:1},
+    {n:'Staff Training',ph:'Phase 4',du:'30 d',st:'07/08/25',fi:'17/09/25',pr:'10',sl:'0 d',cr:0},
+    {n:'System Testing',ph:'Phase 4',du:'30 d',st:'07/08/25',fi:'17/09/25',pr:'10',sl:'0 d',cr:1},
+    {n:'Completion & Handover',ph:'Phase 5',du:'37 d',st:'18/09/25',fi:'07/11/25',pr:'11',sl:'N/A',cr:0,sum:1},
+    {n:'Final Quality Assurance',ph:'Phase 5',du:'23 d',st:'18/09/25',fi:'20/10/25',pr:'13',sl:'0 d',cr:0},
+    {n:'Handover',ph:'Phase 5',du:'14 d',st:'21/10/25',fi:'07/11/25',pr:'15',sl:'0 d',cr:1}
+  ];
+  var gantt=document.getElementById('gantt'),gd=document.getElementById('gttDetail');
+  if(gantt&&gd){
+    var grows=gantt.querySelectorAll('.gcol .grow'),gbars=gantt.querySelectorAll('.gg .gbrow');
+    function selTask(i){
+      for(var k=0;k<grows.length;k++)grows[k].classList.toggle('sel',k===i);
+      for(var k2=0;k2<gbars.length;k2++)gbars[k2].classList.toggle('sel',k2===i);
+      var t=TASK[i];if(!t)return;
+      gd.querySelector('.gd-name').textContent=t.n;
+      gd.querySelector('.gd-ph').textContent=t.ph;
+      var flag=gd.querySelector('.gd-flag');
+      if(t.sum){flag.textContent='Summary';flag.className='gd-flag sum';}
+      else if(t.cr){flag.textContent='Critical path';flag.className='gd-flag crit';}
+      else{flag.textContent='Has float';flag.className='gd-flag ok';}
+      gd.querySelector('.gd-du').textContent=t.du;gd.querySelector('.gd-st').textContent=t.st;
+      gd.querySelector('.gd-fi').textContent=t.fi;gd.querySelector('.gd-pr').textContent=t.pr;
+      gd.querySelector('.gd-sl').textContent=t.sl;
+      gd.classList.remove('flip');void gd.offsetWidth;gd.classList.add('flip');
+    }
+    Array.prototype.forEach.call(grows,function(r,i){
+      r.setAttribute('tabindex','0');r.setAttribute('role','button');
+      r.addEventListener('click',function(){selTask(i);});
+      if(gbars[i])gbars[i].addEventListener('click',function(){selTask(i);});
+      r.addEventListener('keydown',function(e){
+        if(e.key==='Enter'||e.key===' '){e.preventDefault();selTask(i);}
+        else if(e.key==='ArrowDown'&&grows[i+1]){e.preventDefault();grows[i+1].focus();}
+        else if(e.key==='ArrowUp'&&grows[i-1]){e.preventDefault();grows[i-1].focus();}
+      });
+    });
+    selTask(2);
+  }
 
   var eb=document.getElementById('emailBtn'),toast=document.getElementById('toast'),tT;
   function showToast(msg){if(!toast)return;toast.textContent=msg;toast.classList.add('show');clearTimeout(tT);tT=setTimeout(function(){toast.classList.remove('show');},2800);}
