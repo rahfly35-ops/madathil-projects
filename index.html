@@ -96,7 +96,7 @@ p{max-width:66ch}
 .roadmap{margin-top:46px;max-width:920px}
 .rm-cap{display:flex;justify-content:space-between;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:9px;font-weight:600}
 .rm-track{position:relative;display:flex;gap:4px;height:34px}
-.rm-seg{position:relative;flex:0 0 var(--w);min-width:0}
+.rm-seg{position:relative;flex:0 1 var(--w);min-width:0}
 .rm-seg .rbar{position:absolute;inset:0;border-radius:5px;background:var(--sc);transform:scaleX(0);transform-origin:left;
   transition:transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:calc(.25s + var(--i)*.16s)}
 .roadmap.go .rm-seg .rbar{transform:scaleX(1)}
@@ -336,6 +336,23 @@ p{max-width:66ch}
 .gd-fields b{font-family:ui-monospace,Consolas,monospace;font-size:13.5px;color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
 @media(max-width:640px){.gd-fields{grid-template-columns:repeat(2,1fr)}}
 
+/* mobile polish */
+@media(max-width:600px){
+  .wrap{padding:0 18px}
+  .section{padding:62px 0}
+  .hero-inner{padding:92px 0 40px}
+  .hero h1{font-size:clamp(40px,12.5vw,60px)}
+  .hero .role{font-size:17px}
+  .roadmap{margin-top:32px}
+  .rm-track{gap:3px;height:30px}
+  .rm-seg .rtx{display:none}
+  .rm-mile{display:none}
+  .msp-hideSm{display:none}
+  .now-head .dt{margin-left:0;flex-basis:100%}
+  .now-stats{gap:22px}
+  .hsteps,.gantt-scroll,.regscroll,.matrix-wrap{-webkit-overflow-scrolling:touch}
+}
+
 /* reveal */
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
 .reveal.reveal-in{opacity:1;transform:none}
@@ -470,7 +487,7 @@ p{max-width:66ch}
     <div class="mspwrap reveal">
       <div class="msp-title">
         <span class="msp-appicon">P</span>
-        <span class="f"><b>CSWN_Project_Plan.mpp</b> · Project Professional</span>
+        <span class="f"><b>CSWN_Project_Plan.mpp</b><span class="msp-hideSm"> · Project Professional</span></span>
         <span class="win-ctrls"><button aria-hidden="true" tabindex="-1">&#8211;</button><button aria-hidden="true" tabindex="-1">&#9633;</button><button class="cls" aria-hidden="true" tabindex="-1">&#10005;</button></span>
       </div>
       <div class="msp-ribbon"><span class="file">File</span><span class="tab on">Task</span><span class="tab">Resource</span><span class="tab">Report</span><span class="tab">Project</span><span class="tab">View</span><span class="tab">Format</span></div>
